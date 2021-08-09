@@ -9,12 +9,13 @@ import (
 	"time"
 )
 
-var (
+const (
 	loginUrl = "https://passport.ustc.edu.cn/login?service=https%3A%2F%2Fweixine.ustc.edu.cn%2F2020%2Fcaslogin"
 	username = ""
 	password = ""
-	logger   zerolog.Logger
 )
+
+var logger zerolog.Logger
 
 func main() {
 	file, err := os.OpenFile("./log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
@@ -39,7 +40,7 @@ func main() {
 }
 
 func report() time.Time {
-	u := launcher.New().NoSandbox(true).Headless(false).MustLaunch()
+	u := launcher.New().NoSandbox(true).MustLaunch()
 	page := rod.New().ControlURL(u).MustConnect().MustIncognito().MustPage(loginUrl)
 	page.MustElement("#username").MustInput(username)
 	page.MustElement("#password").MustInput(password)
