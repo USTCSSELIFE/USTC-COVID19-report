@@ -26,32 +26,39 @@ func main() {
 	logger = zerolog.New(file).With().Timestamp().Caller().Logger()
 
 	for i := 0; i < 5; i++ {
-		reportTime := report()
-		if time.Now().Sub(reportTime) > time.Minute*10 {
-			// if one doesn't report will automatically receive a mail by USTC,
-			// so not necessarily to tell the failure
-			logger.Error().Msgf("fail to report: %v\n", reportTime)
-		} else {
-			logger.Info().Msgf("succeed to report: %v\n", reportTime)
+		reportTime, ok := report()
+		if !ok {
+			logger.Info().Msgf("have reported at %v\n", reportTime)
 			return
 		}
+		if isTimeValid(reportTime) {
+			logger.Info().Msgf("succeed to report at %v\n", reportTime)
+			return
+		}
+		// if one doesn't report will automatically receive a mail by USTC,
+		// so not necessarily to tell the failure
+		logger.Error().Msgf("fail to report: %v\n", reportTime)
 		logger.Info().Msgf("retry to report %d times\n", i+1)
 	}
 }
 
-func report() time.Time {
-	u := launcher.New().NoSandbox(true).MustLaunch()
-	page := rod.New().ControlURL(u).MustConnect().MustIncognito().MustPage(loginUrl)
+func report() (time.Time, bool) {
+	u := launcher.New().NoSandbox(true).Headless(false).MustLaunch()
+	page := rod.New().ControlURL(u).MustConnect().MustIncognito().MustPage(loginUrl).MustWindowFullscreen()
 	page.MustElement("#username").MustInput(username)
 	page.MustElement("#password").MustInput(password)
 	page.MustElement("#login").MustClick()
-	page.MustWaitLoad().MustElement("#report-submit-btn").MustClick()
-	timeText, err := page.MustWaitLoad().MustElementX("//div[@id='daliy-report']//span//strong").Text()
-	if err != nil {
-		logger.Err(err)
-	}
 
-	return formatTime(timeText)
+	timeText := page.MustWaitLoad().MustElementX("//div[@id='daliy-report']//span//strong").MustText()
+
+	// if one has reported
+	if !isTimeValid(formatTime(timeText)) {
+		return formatTime(timeText), false
+	}
+	page.MustElement("#report-submit-btn").MustClick()
+	timeText = page.MustWaitLoad().MustElementX("//div[@id='daliy-report']//span//strong").MustText()
+
+	return formatTime(timeText), true
 }
 
 func formatTime(timeText string) time.Time {
@@ -66,4 +73,8 @@ func formatTime(timeText string) time.Time {
 		logger.Err(err)
 	}
 	return reportTime
+}
+
+func isTimeValid(reportTime time.Time) bool {
+	return time.Now().Sub(reportTime) < time.Minute*10
 }
