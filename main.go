@@ -47,15 +47,14 @@ func report() (time.Time, bool) {
 	page.MustElement("#username").MustInput(username)
 	page.MustElement("#password").MustInput(password)
 	page.MustElement("#login").MustClick()
-
 	timeText := page.MustWaitLoad().MustElementX("//div[@id='daliy-report']//span//strong").MustText()
 
 	// if one has reported
 	if haveReported(formatTime(timeText)) {
 		return formatTime(timeText), false
 	}
+
 	page.MustElement("#report-submit-btn").MustClick()
 	timeText = page.MustWaitLoad().MustElementX("//div[@id='daliy-report']//span//strong").MustText()
-
 	return formatTime(timeText), true
 }
