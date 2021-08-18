@@ -14,16 +14,18 @@ func formatTime(timeText string) (time.Time, error) {
 }
 
 func isTimeValid(reportTime time.Time) bool {
-	return time.Since(reportTime) < time.Minute*10
+	cReportTime := carbon.Time2Carbon(reportTime)
+	cNow := carbon.Now()
+	if cReportTime.BetweenIncludedBoth(cNow.AddMinutes(-10), cNow) {
+		return true
+	}
+	return false
 }
 
 func haveReported(reportTime time.Time) bool {
 	cReportTime := carbon.Time2Carbon(reportTime)
-	cNow := carbon.Time2Carbon(time.Now())
+	cNow := carbon.Now()
 
-	if cReportTime.IsFuture() {
-		return false
-	}
 	if cReportTime.BetweenIncludedBoth(cNow.StartOfDay(), cNow) {
 		return true
 	}

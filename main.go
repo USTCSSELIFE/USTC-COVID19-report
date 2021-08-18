@@ -62,10 +62,15 @@ func report() (time.Time, error) {
 		return time.Time{}, err
 	}
 	if haveReported(t) {
-		return time.Time{}, haveReportError
+		return t, haveReportError
 	}
 
 	page.MustElement("#report-submit-btn").MustClick()
 	timeText = page.MustWaitLoad().MustElementX("//div[@id='daliy-report']//span//strong").MustText()
+	t, err = formatTime(timeText)
+	if err != nil {
+		return time.Time{}, err
+	}
+
 	return t, nil
 }
