@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/base64"
 	"github.com/go-rod/rod"
 	"github.com/go-rod/rod/lib/launcher"
 	"github.com/pkg/errors"
@@ -53,6 +54,12 @@ func report() (time.Time, error) {
 	page := rod.New().ControlURL(u).MustConnect().MustIncognito().MustPage(loginUrl).MustWindowFullscreen()
 	page.MustElement("#username").MustInput(username)
 	page.MustElement("#password").MustInput(password)
+	bin := page.MustElementX("//img[@class='validate-img']").MustResource()
+	validateCode, err := getValidateCode(base64.StdEncoding.EncodeToString(bin))
+	if err != nil {
+		return time.Time{}, err
+	}
+	page.MustElement("#validate").MustInput(validateCode)
 	page.MustElement("#login").MustClick()
 	timeText := page.MustWaitLoad().MustElementX("//div[@id='daliy-report']//span//strong").MustText()
 

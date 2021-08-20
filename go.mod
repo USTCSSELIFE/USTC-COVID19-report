@@ -9,5 +9,7 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/rs/zerolog v1.23.0
 	github.com/stretchr/testify v1.7.0
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.232 // indirect
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/ocr v1.0.232 // indirect
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
 )

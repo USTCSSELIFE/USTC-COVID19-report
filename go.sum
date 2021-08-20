@@ -17,6 +17,10 @@ github.com/rs/zerolog v1.23.0/go.mod h1:6c7hFfxPOy7TacJc4Fcdi24/J0NKYGzjG8FWRI91
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/testify v1.7.0 h1:nwc3DEeHmmLAfoZucVR881uASk0Mfjw8xYJ99tb5CcY=
 github.com/stretchr/testify v1.7.0/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/h/Wwjteg=
+github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.232 h1:kwsWbh4rEw42ZDe9/812ebhbwNZxlQyZ2sTmxBOKhN4=
+github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.232/go.mod h1:7sCQWVkxcsR38nffDW057DRGk8mUjK1Ing/EFOK8s8Y=
+github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/ocr v1.0.232 h1:c/4bmK6Bxx+Stg3bosvlvZyXxF8QvmEfnyIy9u6jJ0E=
+github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/ocr v1.0.232/go.mod h1:2YDwUwmYljNi++uOr+0X+axpT3D+brO+BkLgUYE+Aa0=
 github.com/ysmood/goob v0.3.0 h1:XZ51cZJ4W3WCoCiUktixzMIQF86W7G5VFL4QQ/Q2uS0=
 github.com/ysmood/goob v0.3.0/go.mod h1:S3lq113Y91y1UBf1wj1pFOxeahvfKkCk6mTWTWbDdWs=
 github.com/ysmood/got v0.14.1 h1:lTtBNVF2nxLs/jcV7leNUWVYO9jgjOUpClXbu3ihIPA=
