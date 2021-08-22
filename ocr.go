@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/pkg/errors"
+	"strconv"
 
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common"
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/profile"
@@ -13,7 +14,10 @@ const (
 	secretKey = ""
 )
 
-var lowConfidenceError = errors.New("confidence is lower than 85")
+var (
+	lowConfidenceError = errors.New("confidence is lower than 85")
+	detectedTextError  = errors.New("detected text is not a pure number")
+)
 
 func getValidateCode(imageBase64 string) (string, error) {
 	credential := common.NewCredential(
@@ -31,8 +35,12 @@ func getValidateCode(imageBase64 string) (string, error) {
 	if err != nil {
 		return "", err
 	}
+	logger.Info().Msg(response.ToJsonString())
 
 	validateCode := *response.Response.TextDetections[0].DetectedText
+	if _, err = strconv.Atoi(validateCode); err != nil {
+		return "", detectedTextError
+	}
 	confidence := *response.Response.TextDetections[0].Confidence
 	if confidence < 85 {
 		return "", lowConfidenceError

@@ -35,7 +35,7 @@ func main() {
 				return
 			}
 			logger.Error().Msgf("fail to report: %v", err)
-			return
+			continue
 		}
 		if isTimeValid(reportTime) {
 			logger.Info().Msgf("succeed to report at %v", reportTime)
