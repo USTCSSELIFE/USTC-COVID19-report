@@ -9,6 +9,7 @@ import (
 
 func TestTimeValid(t *testing.T) {
 	assert.Equal(t, true, isTimeValid(time.Now()))
+	assert.Equal(t, false, isTimeValid(time.Time{}))
 	assert.Equal(t, false, isTimeValid(carbon.Time2Carbon(time.Now()).AddMinute().Carbon2Time()))
 	assert.Equal(t, true, isTimeValid(carbon.Time2Carbon(time.Now()).AddMinutes(-1).Carbon2Time()))
 }

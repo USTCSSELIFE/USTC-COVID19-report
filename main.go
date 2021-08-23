@@ -28,6 +28,7 @@ func main() {
 	logger = zerolog.New(file).With().Timestamp().Caller().Logger()
 
 	for i := 0; i < 5; i++ {
+		logger.Info().Msgf("try to report: %v time(s)", i+1)
 		reportTime, err := report()
 		if err != nil {
 			if errors.Is(err, haveReportError) {
@@ -40,18 +41,19 @@ func main() {
 		if isTimeValid(reportTime) {
 			logger.Info().Msgf("succeed to report at %v", reportTime)
 			return
+		} else {
+			logger.Error().Msgf("report time is not valid: %v", reportTime)
 		}
 		// if one doesn't report will automatically receive a mail by USTC,
-		// so not necessarily to tell the failure
-		logger.Error().Time("lastReportTime", reportTime).
-			Int("retry times", i+1).
-			Msg("fail to report")
+		// so it's not necessary to tell the failure to him/her.
 	}
 }
 
 func report() (time.Time, error) {
 	u := launcher.New().NoSandbox(true).MustLaunch()
 	page := rod.New().ControlURL(u).MustConnect().MustIncognito().MustPage(loginUrl).MustWindowFullscreen()
+	defer page.Close()
+
 	page.MustElement("#username").MustInput(username)
 	page.MustElement("#password").MustInput(password)
 	bin := page.MustElementX("//img[@class='validate-img']").MustResource()

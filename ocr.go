@@ -15,7 +15,7 @@ const (
 )
 
 var (
-	lowConfidenceError = errors.New("confidence is lower than 85")
+	lowConfidenceError = errors.New("confidence is lower than 95")
 	detectedTextError  = errors.New("detected text is not a pure number")
 )
 
@@ -42,7 +42,7 @@ func getValidateCode(imageBase64 string) (string, error) {
 		return "", detectedTextError
 	}
 	confidence := *response.Response.TextDetections[0].Confidence
-	if confidence < 85 {
+	if confidence < 95 {
 		return "", lowConfidenceError
 	}
 
